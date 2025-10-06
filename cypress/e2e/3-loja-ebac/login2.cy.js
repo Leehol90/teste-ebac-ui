@@ -1,15 +1,27 @@
 /*
-O codigo escrito nesse arquivo irá rodar no cypress. 
-Para poder utilizá-lo, baixar e executar o programa.
-O começo do arquivo deve conter essas três barras.
-o arquivo.cy.js é um arquivo cypress, que por sua vez é um arquivo json.
+Codigo melhorado da versao anterior.
+Utiliza Hooks para poupar codigo e deixar mais compartimentado
 */
 
 /// <reference types="cypress"/>
 
 describe('Funcionalidade: Login', () => {
-    it('Deve fazer login com sucesso', () => {
+
+    //Hook: beforeEach.
+    //Antes de cada teste ele irá acessar a página da lojaebac
+    beforeEach(() => {
         cy.visit('http://lojaebac.ebaconline.art.br/minha-conta/')
+    });
+
+    //Hook: afterEach
+    //Após cada teste será tirado um screenshot que será salvo na pasta screenshots.
+    //O salvamento é automatico. A pasta screenshots é criada pelo metodo screenshot.
+    afterEach(() => {
+        cy.screenshot()
+    });
+
+    it('Deve fazer login com sucesso', () => {
+        
         //cy.visit carrega uma url para fazer os testes
         cy.get('#username').type('Augusto@teste.com')
         //pega o campo 'usuario' e digita o texto 'Augusto@teste.com'
@@ -28,7 +40,7 @@ describe('Funcionalidade: Login', () => {
     Ele é usado para fazer um teste especifico e depois deve ser apagado
     */
     it('Deve exibir uma mensgagem de erro ao inserir usuário inválido', () => {
-        cy.visit('http://lojaebac.ebaconline.art.br/minha-conta/')
+       
         cy.get('#username').type('zezinho@teste.com')
         cy.get('#password').type('teste@teste123')
         cy.get('.woocommerce-form > .button').click()
@@ -45,8 +57,8 @@ describe('Funcionalidade: Login', () => {
 
     });
     //Validação de senha inválida
-    it.only('Deve exibir uma mensagem de erro ao inserir senha inválida', () => {
-        cy.visit('http://lojaebac.ebaconline.art.br/minha-conta/')
+    it('Deve exibir uma mensagem de erro ao inserir senha inválida', () => {
+       
         cy.get('#username').type('Augusto@teste.com')
         cy.get('#password').type('testeInvalido@')
         cy.get('.woocommerce-form > .button').click()
